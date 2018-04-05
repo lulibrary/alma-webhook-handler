@@ -1,0 +1,32 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/node:7.10
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - dependencies-cache-{{ checksum "package.json" }}
+            - dependencies-cache
+      - run:
+          name: Install Serverless CLI and dependencies
+          command: |
+            sudo npm i -g serverless
+            npm install
+      - run:
+          name: Setup CodeClimate test-reporter
+          command: |
+            curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+            chmod +x ./cc-test-reporter
+      - save_cache:
+          paths:
+            - node_modules
+          key: dependencies-cache-{{ checksum "package.json" }}
+      - run:
+          name: Run Tests with Coverage
+          command: |
+            ./cc-test-reporter before-build
+            npm test
+            ./cc-test-reporter after-build --exit-code $?
+        
