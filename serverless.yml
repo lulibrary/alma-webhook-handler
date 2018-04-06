@@ -7,7 +7,13 @@ service: alma-webhook-handler
 provider:
   name: aws
   runtime: nodejs6.10
+  region: ${opt:region}
+  stage: ${opt:stage}
 
 functions:
   hello:
     handler: handler.hello
+    events:
+      - http:
+          path: hello
+          method: get
