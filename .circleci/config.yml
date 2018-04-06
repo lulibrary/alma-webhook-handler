@@ -61,10 +61,12 @@ jobs:
       - run:
           name: Setup AWS production credentials
           command: |
-            aws configure --profile prod set region eu-west-2
-            aws configure --profile prod set access_key ${AWS_PRODUCTION_ACCESS_KEY_ID}
-            aws configure --profile prod set scret_key ${AWS_PRODUCTION_SECRET_ACCESS_KEY}
-            aws configure --profile prod list
+            cat >> /home/circleci/.aws/credentials << EOF
+
+            [prod]
+            aws_access_key_id = ${AWS_PRODUCTION_ACCESS_KEY_ID}
+            aws_secret_access_key = ${AWS_PRODUCTION_SECRET_ACCESS_KEY}
+            EOF
       - restore_cache:
           keys:
             - dependencies-cache-{{ checksum "package.json" }}
