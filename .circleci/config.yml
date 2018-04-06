@@ -10,15 +10,15 @@ jobs:
             - dependencies-cache-{{ checksum "package.json" }}
             - dependencies-cache
       - run:
-          name: Install Serverless CLI and dependencies
-          command: |
-            sudo npm i -g serverless
-            npm install
-      - run:
           name: Setup CodeClimate test-reporter
           command: |
             curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
             chmod +x ./cc-test-reporter
+      - run:
+          name: Install Serverless CLI and dependencies
+          command: |
+            sudo npm i -g serverless
+            npm install
       - save_cache:
           paths:
             - node_modules
@@ -29,4 +29,75 @@ jobs:
             ./cc-test-reporter before-build
             npm test
             ./cc-test-reporter after-build --exit-code $?
-        
+  deploy-staging:
+    docker:
+      - image: circleci/node:7.10
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - dependencies-cache-{{ checksum "package.json" }}
+            - dependencies-cache
+      - run:
+          name: Install Serverless CLI and dependencies
+          command: |
+            sudo npm i -g serverless
+            npm install
+      - save_cache:
+          paths:
+            - node_modules
+          key: dependencies-cache-{{ checksum "package.json" }}
+      - run:
+          name: Deploy to Staging environment
+          command: |
+            sls deploy --stage staging --region eu-west-2
+  deploy-production:
+    docker:
+      - image: circleci/node:7.10
+        environment:
+          AWS_SECRET_ACCESS_KEY: ${AWS_PRODUCTION_SECRET_ACCESS_KEY}
+          AWS_ACCESS_KEY_ID: ${AWS_PRODUCTION_ACCESS_KEY_ID}
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - dependencies-cache-{{ checksum "package.json" }}
+            - dependencies-cache
+      - run:
+          name: Install Serverless CLI and dependencies
+          command: |
+            sudo npm i -g serverless
+            npm install
+      - save_cache:
+          paths:
+            - node_modules
+          key: dependencies-cache-{{ checksum "package.json" }}
+      - run:
+          name: Deploy to Production environment
+          command: |
+            sls deploy --stage prod --region eu-west-2
+workflows:
+  version: 2
+  serverless-workflow:
+    jobs:
+      - build
+      - deploy-staging:
+          filters:
+            branches:
+              only:
+                - master
+      - request-prod-deploy:
+          type: approval
+          requires:
+            - deploy-staging
+          filters:
+            branches:
+              only:
+                - master
+      - deploy-production:
+          requires:
+            - request-prod-deploy
+          filters:
+            branches:
+              only:
+                - master
