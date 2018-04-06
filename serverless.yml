@@ -2,7 +2,7 @@
 #
 # Happy Coding!
 
-service: alma-webhook-handler
+service: lag-awh
 
 provider:
   name: aws
