@@ -4,7 +4,7 @@
   "description": "AWS Serverless Application - Listens for Ex-Libris Alma web-hook events and passes these to backend SNS topics.",
   "main": "handler.js",
   "scripts": {
-    "test": "nyc --reporter=lcov mocha",
+    "test": "nyc --reporter=lcov mocha --recursive",
     "coverage": "nyc report --reporter=lcov"
   },
   "repository": {
