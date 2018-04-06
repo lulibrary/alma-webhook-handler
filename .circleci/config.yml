@@ -61,6 +61,7 @@ jobs:
       - run:
           name: Setup AWS production credentials
           command: |
+            mkdir -p /home/circleci/.aws
             cat >> /home/circleci/.aws/credentials << EOF
 
             [prod]
