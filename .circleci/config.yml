@@ -59,7 +59,7 @@ jobs:
     steps:
       - checkout
       - run:
-        name: Setup AWS production credentials
+          name: Setup AWS production credentials
           command: |
             aws configure --profile prod set region eu-west-2
             aws configure --profile prod set access_key ${AWS_PRODUCTION_ACCESS_KEY_ID}
