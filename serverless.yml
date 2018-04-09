@@ -23,3 +23,5 @@ functions:
       - http:
           path: ''
           method: post
+    environment:
+      ALMA_SECRET_KEY_NAME: ''
