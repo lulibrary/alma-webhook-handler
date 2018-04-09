@@ -17,3 +17,72 @@ functions:
       - http:
           path: ''
           method: get
+    tags:
+      serverless: true
+      environment: ${self:custom.environmentNames.${opt:stage}}
+      service: library-api-gateway
+      sub-service: webhook-handler
+  webhook:
+    handler: src/webhook-handler/handler.handleWebhookEvent
+    events:
+      - http:
+          path: ''
+          method: post
+    environment:
+      ALMA_SECRET_KEY_NAME: /library-api-gateway/webhook-handler/shared-secret
+    role: webhookHandlerRole
+    tags:
+      serverless: true
+      environment: ${self:custom.environmentNames.${opt:stage}}
+      service: library-api-gateway
+      sub-service: webhook-handler
+
+resources:
+  Resources:
+    webhookHandlerRole:
+      Type: AWS::IAM::Role
+      Properties:
+        AssumeRolePolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Principal:
+                Service:
+                  - lambda.amazonaws.com
+              Action: sts:AssumeRole
+        Policies:
+          - PolicyName: ${self:service}-${opt:stage}-AllowGetSSMParameters-Policy
+            PolicyDocument:
+              Version: '2012-10-17'
+              Statement:
+                Effect: Allow
+                Action: 
+                  - ssm:GetParameter
+                  - ssm:GetParameters
+                  - ssm:GetParametersByPath
+                Resource: arn:aws:ssm:eu-west-2:#{AWS::AccountId}:parameter/library-api-gateway/webhook-handler/*
+          - PolicyName: ${self:service}-${opt:stage}-AllowKMSKeyAccess-Policy
+            PolicyDocument:
+              Version: '2012-10-17'
+              Statement:
+                Effect: Allow
+                Action:
+                  - kms:GenerateDataKey
+                  - kms:Encrypt
+                  - kms:Decrypt
+                Resource: ${self:custom.KeyArns.${opt:stage}}
+
+custom:
+  KeyArns:
+    dev: ${env:KEY_ARN_DEV}
+    stg: ${env:KEY_ARN_STG}
+    prod: ${env:KEY_ARN_PROD}
+  environmentNames:
+    dev: development
+    stg: staging
+    prod: production
+
+plugins:
+  - serverless-pseudo-parameters
+              
+      
