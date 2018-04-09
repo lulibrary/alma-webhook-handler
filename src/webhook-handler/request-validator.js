@@ -22,7 +22,7 @@ const validateSignature = (body, secret, signature) => {
 }
 
 const getSecretFromAWS = () => {
-  const keyName = process.env.ALMA_SECRET_KEY_NAME || ""
+  const keyName = process.env.ALMA_SECRET_KEY_NAME
   const ssm = new AWS.SSM({apiVersion: '2014-11-06'});
   
   const params = {
