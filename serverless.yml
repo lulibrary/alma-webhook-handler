@@ -17,3 +17,9 @@ functions:
       - http:
           path: ''
           method: get
+  webhook:
+    handler: src/webhook-handler/handler.handleWebhookEvent
+    events:
+      - http:
+          path: ''
+          method: get
