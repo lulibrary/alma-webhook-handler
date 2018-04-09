@@ -11,9 +11,9 @@ provider:
   stage: ${opt:stage}
 
 functions:
-  hello:
+  challenge:
     handler: src/challenge-handler/handler.handleChallengeEvent
     events:
       - http:
-          path: hello
+          path: ''
           method: get
