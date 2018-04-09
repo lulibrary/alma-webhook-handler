@@ -1,14 +1,14 @@
 'use strict';
 
 const HTTPError = require('node-http-error')
-const validate = require('./validate')
+const validateRequestSignature = require('./validate')
 
 module.exports.handleWebhookEvent = (event, context, callback) => {
   
   let response = {}
 
   
-  validate(event.body, event.headers['X-Exl-Signature'])
+  validateRequestSignature(event.body, event.headers['X-Exl-Signature'])
     .then(() => {
       response = {
         statusCode: 200,

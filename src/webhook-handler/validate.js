@@ -5,7 +5,7 @@ const crypto = require('crypto')
 const HTTPError = require('node-http-error');
 
 
-const validate = (message, signature) => {
+const validateRequestSignature = (message, signature) => {
   return getSecretFromAWS()
     .then((secretKey) => {
       if(!validateSignature(message, secretKey, signature)) {
@@ -37,4 +37,4 @@ const getSecretFromAWS = () => {
   })
 }
 
-module.exports = validate
+module.exports = validateRequestSignature
