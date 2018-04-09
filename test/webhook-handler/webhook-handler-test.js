@@ -1,3 +1,5 @@
+const AWS_MOCK = require('aws-sdk-mock')
+
 // Test libraries
 const chai = require('chai')
 const should = chai.should();
@@ -11,6 +13,14 @@ const loanCreatedEvent = require('./events/loan-created-event.json')
 const invalidSignatureEvent = require('./events/invalid-signature.json')
 
 describe('webhook handler tests', () => {
+  before(() => {
+    AWS_MOCK.mock('SSM', 'getParameter', { Value: "secretkey" })
+  })
+
+  after(() => {
+    AWS_MOCK.restore('SSM')
+  })
+
   it('should callback with a 200 response if a valid event is sent', (done) => {
     handler.handleWebhookEvent(loanCreatedEvent, null, (err, res) => {
       res.statusCode.should.equal(200)
