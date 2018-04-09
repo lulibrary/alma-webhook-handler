@@ -28,5 +28,8 @@
     "nyc": "^11.6.0",
     "sinon": "^4.5.0",
     "sinon-chai": "^3.0.0"
+  },
+  "dependencies": {
+    "node-http-error": "^2.0.0"
   }
 }
