@@ -1,7 +1,7 @@
 const crypto = require('crypto')
 const HTTPError = require('node-http-error');
 
-const secretKey = "secretkey";
+const secretKey = process.env.ALMA_WEBHOOK_SECRET;
 
 const validate = (message, signature) => {
   if(!validateSignature(message, secretKey, signature)) {
