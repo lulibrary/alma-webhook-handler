@@ -17,6 +17,11 @@ functions:
       - http:
           path: ''
           method: get
+    tags:
+      serverless: true
+      environment: ${self:custom.environmentNames.${opt:stage}}
+      service: library-api-gateway
+      sub-service: webhook-handler
   webhook:
     handler: src/webhook-handler/handler.handleWebhookEvent
     events:
@@ -26,6 +31,11 @@ functions:
     environment:
       ALMA_SECRET_KEY_NAME: /library-api-gateway/webhook-handler/shared-secret
     role: webhookHandlerRole
+    tags:
+      serverless: true
+      environment: ${self:custom.environmentNames.${opt:stage}}
+      service: library-api-gateway
+      sub-service: webhook-handler
 
 resources:
   Resources:
@@ -64,8 +74,13 @@ resources:
 
 custom:
   KeyArns:
-    dev: arn:aws:kms:eu-west-2:954388856028:key/17ff7cca-c927-4d00-a136-b4bde7827306
+    dev: arn:aws:kms:eu-west-2:153783654930:key/c0b0cfa7-587e-4c72-b580-74893191412f
+    stg: arn:aws:kms:eu-west-2:954388856028:key/17ff7cca-c927-4d00-a136-b4bde7827306
     prod: arn:aws:kms:eu-west-2:853031445875:key/15e1baba-060d-4a8f-ad46-c2baf798abac
+  environmentNames:
+    dev: development
+    stg: staging
+    prod: production
 
 plugins:
   - serverless-pseudo-parameters
