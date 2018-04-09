@@ -74,9 +74,9 @@ resources:
 
 custom:
   KeyArns:
-    dev: arn:aws:kms:eu-west-2:153783654930:key/c0b0cfa7-587e-4c72-b580-74893191412f
-    stg: arn:aws:kms:eu-west-2:954388856028:key/17ff7cca-c927-4d00-a136-b4bde7827306
-    prod: arn:aws:kms:eu-west-2:853031445875:key/15e1baba-060d-4a8f-ad46-c2baf798abac
+    dev: ${env:KEY_ARN_DEV}
+    stg: ${env:KEY_ARN_STG}
+    prod: ${env:KEY_ARN_PROD}
   environmentNames:
     dev: development
     stg: staging
