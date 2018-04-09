@@ -1,7 +1,7 @@
 'use strict';
 
 const HTTPError = require('node-http-error')
-const validateRequestSignature = require('./validate')
+const validateRequestSignature = require('./request-validator')
 
 module.exports.handleWebhookEvent = (event, context, callback) => {
   

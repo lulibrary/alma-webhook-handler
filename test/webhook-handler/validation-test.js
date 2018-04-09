@@ -13,7 +13,7 @@ const sandbox = sinon.sandbox.create();
 const HTTPError = require('node-http-error');
 
 // Module under test
-const validate = require('../../src/webhook-handler/validate');
+const validateRequestSignature = require('../../src/webhook-handler/request-validator');
 
 describe('signature validation tests', () => {  
   afterEach(() => {
@@ -23,14 +23,14 @@ describe('signature validation tests', () => {
   it('should throw an error if the signature is invalid', () => {
     AWS_MOCK.mock('SSM', 'getParameter', { Value: "secretkey" })
 
-    validate("a message", "not a valid signature").should.eventually.be.rejectedWith("An invalid message signature was sent")
+    validateRequestSignature("a message", "not a valid signature").should.eventually.be.rejectedWith("An invalid message signature was sent")
       .and.should.eventually.be.an.instanceof(HTTPError)
   })
 
   it('should not throw an error if the signature is valid', () => {
     AWS_MOCK.mock('SSM', 'getParameter', { Value: "secretkey" })
 
-    validate("{'api':'alma'}", "FPkZ/un59vBhgs4dn6yqhqMosD4oK4/fp8swRtkVxAE=").should.eventually.be.fulfilled;
+    validateRequestSignature("{'api':'alma'}", "FPkZ/un59vBhgs4dn6yqhqMosD4oK4/fp8swRtkVxAE=").should.eventually.be.fulfilled;
   })
 
   it('should be rejected with an error if getParameter fails', () => {
@@ -38,7 +38,7 @@ describe('signature validation tests', () => {
     getStub.callsArgWith(1, new Error('get parameter failed'), null)
     AWS_MOCK.mock('SSM', 'getParameter', getStub)
 
-    validate("a message", "a signature").should.eventually.be.rejectedWith("get parameter failed")
+    validateRequestSignature("a message", "a signature").should.eventually.be.rejectedWith("get parameter failed")
   })
 
 })
