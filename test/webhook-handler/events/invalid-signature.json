@@ -1,0 +1,9 @@
+{
+  "headers": {
+    "X-Exl-Signature": "ThisIsNotAValidSignature"
+  },
+  "requestContext": {
+    "httpMethod": "POST"
+  },
+  "body": "{'api':'alma'}"
+}
