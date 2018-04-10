@@ -30,6 +30,14 @@ functions:
           method: post
     environment:
       ALMA_SECRET_KEY_NAME: /library-api-gateway/webhook-handler/shared-secret
+      LoanCreatedTopicArn: ${self:custom.topicArns.loanCreated}
+      LoanDueDateTopicArn: ${self:custom.topicArns.loanDueDate}
+      LoanRenewedTopicArn: ${self:custom.topicArns.loanRenewed}
+      LoanReturnedTopicArn: ${self:custom.topicArns.loanReturned}
+      RequestCreatedTopicArn:  ${self:custom.topicArns.requestCreated}
+      RequestClosedTopicArn: ${self:custom.topicArns.requestClosed}
+      RequestCanceledTopicArn: ${self:custom.topicArns.requestCanceled}
+      RequestPlacedOnShelfTopicArn: ${self:custom.topicArns.requestPlacedOnShelf}
     role: webhookHandlerRole
     tags:
       serverless: true
