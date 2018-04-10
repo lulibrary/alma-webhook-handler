@@ -36,6 +36,7 @@ functions:
           method: post
     environment:
       ALMA_SECRET_KEY_NAME: /library-api-gateway/webhook-handler/shared-secret
+      AWS_REGION: ${opt:region}
       LoanCreatedTopicArn: ${self:custom.topicArns.loanCreated}
     role: webhookHandlerRole
     tags:

@@ -1,3 +1,4 @@
+// Test libraries
 const sinon = require('sinon');
 const chai = require('chai');
 const chai_as_promised = require('chai-as-promised');
@@ -9,9 +10,11 @@ const expect = chai.expect;
 chai.use(chai_as_promised);
 chai.use(sinon_chai);
 
+// Module under test
 handler = require('../../src/challenge-handler/handler');
 
-const challengeEvent = require('./events/challenge.json')
+// Test data
+const challengeEvent = require('./events/challenge.json');
 
 describe('challenge-response tests', () => {
   it('should callback with the challenge if a GET request is made with a challenge', (done) => {
