@@ -19,6 +19,9 @@ const handler = rewire('../../src/webhook-handler/handler')
 // Test data
 const loanCreatedEvent = require('./events/loan-created-event.json')
 const invalidSignatureEvent = require('./events/invalid-signature.json')
+const invalidJsonEvent = require('./events/invalid-json.json')
+const invalidEventType = require('./events/invalid-event-type.json')
+
 const eventTopicData = require('../../src/webhook-handler/eventTopicData');
 
 describe('webhook handler tests', () => {
@@ -47,9 +50,23 @@ describe('webhook handler tests', () => {
       })
     })
 
-    it('should callback with a 401 response if an invalid event is sent', (done) => {
+    it('should callback with a 401 response if an invalid event signature is sent', (done) => {
       handler.handleWebhookEvent(invalidSignatureEvent, null, (err, res) => {
         res.statusCode.should.equal(401)
+        done()
+      })
+    })
+
+    it('should callback with a 400 response if the event body is not valid JSON', (done) => {
+      handler.handleWebhookEvent(invalidJsonEvent, null, (err, res) => {
+        res.statusCode.should.equal(400)
+        done()
+      })
+    })
+
+    it('should callback with a 500 response if the event type is not supported', (done) => {
+      handler.handleWebhookEvent(invalidEventType, null, (err, res) => {
+        res.statusCode.should.equal(500)
         done()
       })
     })

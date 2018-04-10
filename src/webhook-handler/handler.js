@@ -23,6 +23,8 @@ module.exports.handleWebhookEvent = (event, context, callback) => {
     .catch((e) => {
       if (e instanceof HTTPError) {
         response = errorResponse(e.status, e.message)
+      } else {
+        response = errorResponse(500, 'Internal server error')
       }
     })
     .then(() => {
@@ -34,11 +36,19 @@ module.exports.handleWebhookEvent = (event, context, callback) => {
 };
 
 const handleSnsPublish = (event) => {
-  const body = JSON.parse(event.body);
+  const body = extractMessageBody(event)
   const eventTopicArn = eventTopicData.get(body.event.value)
   const eventTopic = new Topic(eventTopicArn, process.env.AWS_REGION)
 
   return eventTopic.publish(event.body)
+}
+
+const extractMessageBody = (event) => {
+  try {
+    return JSON.parse(event.body)
+  } catch (e) {
+    throw new HTTPError(400, 'Event body is not valid JSON')
+  }
 }
 
 const errorResponse = (statusCode, message) => {
