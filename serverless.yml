@@ -9,6 +9,12 @@ provider:
   runtime: nodejs6.10
   region: ${opt:region}
   stage: ${opt:stage}
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - sns:Publish
+      Resource:
+        - ${self:custom.topicArns.loanCreated}
 
 functions:
   challenge:
@@ -30,6 +36,7 @@ functions:
           method: post
     environment:
       ALMA_SECRET_KEY_NAME: /library-api-gateway/webhook-handler/shared-secret
+      LoanCreatedTopicArn: ${self:custom.topicArns.loanCreated}
     role: webhookHandlerRole
     tags:
       serverless: true
@@ -71,6 +78,16 @@ resources:
                   - kms:Encrypt
                   - kms:Decrypt
                 Resource: ${self:custom.KeyArns.${opt:stage}}
+    loanCreatedTopic:
+      Type: AWS::SNS::Topic
+      Properties:
+        DisplayName: AlmaLoanCreated
+  Outputs:
+    LoanCreatedTopicArn:
+      Description: Arn for Loan Created Topic
+      Value: ${self:custom.topicArns.loanCreated}
+      Export:
+        Name: ${self:service}:${opt:stage}:LoanCreatedTopicArn
 
 custom:
   KeyArns:
@@ -81,6 +98,14 @@ custom:
     dev: development
     stg: staging
     prod: production
+  topicArns:
+    loanCreated:
+      "Fn::Join": 
+          - ":"
+          - - "arn:aws:sns"
+            - Ref: "AWS::Region"
+            - Ref: "AWS::AccountId"
+            - "Fn::GetAtt": [loanCreatedTopic, TopicName]
 
 plugins:
   - serverless-pseudo-parameters
