@@ -1,15 +1,14 @@
-'use strict';
+'use strict'
 
-const Topic = require('@lulibrary/lag-utils').Topic;
+const Topic = require('@lulibrary/lag-utils').Topic
 const HTTPError = require('node-http-error')
 
 const validateRequestSignature = require('./request-validator')
-const eventTopicData = require('./eventTopicData');
+const eventTopicData = require('./eventTopicData')
 
 module.exports.handleWebhookEvent = (event, context, callback) => {
-  
   let response = {}
-  
+
   validateRequestSignature(event.body, event.headers['X-Exl-Signature'])
     .then(() => {
       return handleSnsPublish(event)
@@ -17,7 +16,7 @@ module.exports.handleWebhookEvent = (event, context, callback) => {
     .then((data) => {
       response = {
         statusCode: 200,
-        body: "Data successfully published to topic"
+        body: 'Data successfully published to topic'
       }
     })
     .catch((e) => {
@@ -28,12 +27,12 @@ module.exports.handleWebhookEvent = (event, context, callback) => {
       }
     })
     .then(() => {
-      callback(null, response);
+      callback(null, response)
     })
 
   // Use this code if you don't use the http event with the LAMBDA-PROXY integration
   // callback(null, { message: 'Go Serverless v1.0! Your function executed successfully!', event });
-};
+}
 
 const handleSnsPublish = (event) => {
   const body = extractMessageBody(event)
@@ -55,7 +54,7 @@ const errorResponse = (statusCode, message) => {
   return {
     statusCode,
     body: JSON.stringify({
-      message,
+      message
     })
   }
 }
