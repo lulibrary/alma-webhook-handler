@@ -1,0 +1,10 @@
+{
+  "headers": {
+    "X-Exl-Signature": "PFIPndLWqLyeyvGaIpisF9dWuIXmdjZ2W4RaM2kpRJo="
+  },
+  "requestContext": {
+    "httpMethod": "POST"
+  },
+  "body": "{\"body\":{\"event\":{\"value\":\"not a valid event type\"}}}"
+}
+

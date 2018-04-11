@@ -15,7 +15,15 @@ const HTTPError = require('node-http-error');
 // Module under test
 const validateRequestSignature = require('../../src/webhook-handler/request-validator');
 
-describe('signature validation tests', () => {  
+describe('signature validation tests', () => {
+  before(() => {
+    process.env.ALMA_SECRET_KEY_NAME = "testkey"
+  })
+
+  after(() => {
+    delete process.env.ALMA_SECRET_KEY_NAME
+  })
+  
   afterEach(() => {
     AWS_MOCK.restore('SSM')
   })
