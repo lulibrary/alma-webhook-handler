@@ -76,16 +76,16 @@ describe('webhook handler tests', () => {
     before(() => {
       AWS_MOCK.mock('SSM', 'getParameter', { Value: "secretkey" })
       process.env.ALMA_SECRET_KEY_NAME = "testkey"
-      process.env.AWS_REGION = "eu-west-2"
+      process.env.AWS_DEFAULT_REGION = "eu-west-2"
     })
 
     after(() => {
       AWS_MOCK.restore('SSM')
       delete process.env.ALMA_SECRET_KEY_NAME
-      delete process.env.AWS_REGION
+      delete process.env.AWS_DEFAULT_REGION
     })
 
-    it('should call SNS publish with the event body', (done) => {
+    it('should call Topic.publish with the event body', (done) => {
       const publishStub = sandbox.stub(Topic.prototype, 'publish')
       publishStub.resolves(true)
 
