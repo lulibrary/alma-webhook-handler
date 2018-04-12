@@ -75,7 +75,7 @@ describe('webhook handler tests', () => {
     })
   })
 
-  describe('SNS publish tests', () => {
+  describe('Topic publish tests', () => {
     before(() => {
       AWS_MOCK.mock('SSM', 'getParameter', { Value: 'secretkey' })
       process.env.ALMA_SECRET_KEY_NAME = 'testkey'
@@ -113,6 +113,51 @@ describe('webhook handler tests', () => {
         .then(() => {
           getStub.should.have.been.calledWith(expected)
         })
+    })
+  })
+
+  describe('End to end tests', () => {
+    before(() => {
+      AWS_MOCK.mock('SSM', 'getParameter', { Value: 'secretkey' })
+      process.env.ALMA_SECRET_KEY_NAME = 'testkey'
+      process.env.AWS_DEFAULT_REGION = 'eu-west-2'
+    })
+
+    after(() => {
+      AWS_MOCK.restore('SSM')
+      delete process.env.ALMA_SECRET_KEY_NAME
+      delete process.env.AWS_DEFAULT_REGION
+    })
+
+    afterEach(() => {
+      AWS_MOCK.restore('SNS')
+    })
+
+    eventTopicData.forEach((data, topicName) => {
+      it('should call SNS publish with the event body & correct topic arn', (done) => {
+        const getStub = sandbox.stub(eventTopicData, 'get')
+        getStub.returns({
+          sns_arn: 'arn:' + topicName.toLowerCase()
+        })
+
+        const publishStub = sandbox.stub()
+        publishStub.callsArgWith(1, null, true)
+        AWS_MOCK.mock('SNS', 'publish', publishStub)
+
+        let filename = './events/' + topicName.toLowerCase() + '_event.json'
+        let event = require(filename)
+        let expected = {
+          Message: event.body,
+          TargetArn: 'arn:' + topicName.toLowerCase()
+        }
+
+        return handler.handleWebhookEvent(event, null, (err, res) => {
+          should.not.exist(err)
+          res.statusCode.should.equal(200)
+          publishStub.should.have.been.calledWith(expected)
+          done()
+        })
+      })
     })
   })
 })
