@@ -23,6 +23,7 @@ module.exports.handleWebhookEvent = (event, context, callback) => {
       if (e instanceof HTTPError) {
         response = errorResponse(e.status, e.message)
       } else {
+        console.log(e)
         response = errorResponse(500, 'Internal server error')
       }
     })
