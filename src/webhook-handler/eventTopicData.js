@@ -3,6 +3,11 @@ const eventTopicData = new Map([
     {
       sns_arn: process.env.LoanCreatedTopicArn
     }
+  ],
+  ['LOAN_DUE_DATE',
+    {
+      sns_arn: process.env.LoanDueDateTopicArn
+    }
   ]
 ])
 
