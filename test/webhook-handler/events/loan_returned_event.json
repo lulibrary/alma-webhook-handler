@@ -1,0 +1,58 @@
+{
+  "body": "{\"representation\":null,\"portfolio\":null,\"item\":null,\"id\":\"1452370645077141593\",\"action\":\"LOAN\",\"institution\":{\"desc\":\"Lancaster University\",\"value\":\"44LAN_INST\"},\"time\":\"2018-02-23T11:10:12.005Z\",\"event\":{\"desc\":\"Loan returned\",\"value\":\"LOAN_RETURNED\"},\"item_loan\":{\"renewable\":false,\"loan_date\":\"2018-02-23T11:10:06.546Z\",\"loan_status\":\"ACTIVE\",\"due_date\":\"2018-02-23T14:10:06Z\",\"item_barcode\":\"12345\",\"user_id\":\"LBAAJH\",\"library\":{\"desc\":\"Lancaster University Library\",\"value\":\"LANUL\"},\"circ_desk\":{\"desc\":\"Circulation Desk\",\"value\":\"DEFAULT_CIRC_DESK\"},\"loan_id\":\"18263808770001221\",\"process_status\":\"NORMAL\",\"mms_id\":\"9919045950001221\",\"title\":\"Journey\",\"author\":\"Trip, A\",\"description\":\"book\",\"location_code\":{\"name\":\"High Demand 3HR\",\"value\":\"SL03\"},\"item_policy\":{\"description\":\"3-hour rolling loan\",\"value\":\"37\"},\"call_number\":\"owncopy\"},\"bib\":null,\"holding\":null}",
+  "resource": "/{proxy+}",
+  "requestContext": {
+    "resourceId": "123456",
+    "apiId": "1234567890",
+    "resourcePath": "/{proxy+}",
+    "httpMethod": "POST",
+    "requestId": "c6af9ac6-7b61-11e6-9a41-93e8deadbeef",
+    "accountId": "123456789012",
+    "identity": {
+      "apiKey": null,
+      "userArn": null,
+      "cognitoAuthenticationType": null,
+      "caller": null,
+      "userAgent": "Custom User Agent String",
+      "user": null,
+      "cognitoIdentityPoolId": null,
+      "cognitoIdentityId": null,
+      "cognitoAuthenticationProvider": null,
+      "sourceIp": "127.0.0.1",
+      "accountId": null
+    },
+    "stage": "prod"
+  },
+  "queryStringParameters": {
+  },
+  "headers": {
+    "Via": "1.1 08f323deadbeefa7af34d5feb414ce27.cloudfront.net (CloudFront)",
+    "Accept-Language": "en-US,en;q=0.8",
+    "CloudFront-Is-Desktop-Viewer": "true",
+    "CloudFront-Is-SmartTV-Viewer": "false",
+    "CloudFront-Is-Mobile-Viewer": "false",
+    "X-Forwarded-For": "127.0.0.1, 127.0.0.2",
+    "CloudFront-Viewer-Country": "US",
+    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+    "Upgrade-Insecure-Requests": "1",
+    "X-Forwarded-Port": "443",
+    "Host": "1234567890.execute-api.us-east-1.amazonaws.com",
+    "X-Forwarded-Proto": "https",
+    "X-Amz-Cf-Id": "aaaaaaaaaae3VYQb9jd-nvCd-de396Uhbp027Y2JvkCPNLmGJHqlaA==",
+    "CloudFront-Is-Tablet-Viewer": "false",
+    "Cache-Control": "max-age=0",
+    "User-Agent": "Custom User Agent String",
+    "CloudFront-Forwarded-Proto": "https",
+    "Accept-Encoding": "gzip, deflate, sdch",
+    "X-Exl-Signature": "Yzugn+CyVX4fSuC4Hpukr2ykqXawjExr+NmN/WyVj0I=",
+    "Content-type": "application/json"
+  },
+  "pathParameters": {
+    "proxy": "/examplepath"
+  },
+  "httpMethod": "POST",
+  "stageVariables": {
+    "baz": "qux"
+  },
+  "path": "/examplepath"
+}
