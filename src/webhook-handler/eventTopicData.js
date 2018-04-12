@@ -8,6 +8,11 @@ const eventTopicData = new Map([
     {
       sns_arn: process.env.LoanDueDateTopicArn
     }
+  ],
+  ['LOAN_RENEWED',
+    {
+      sns_arn: process.env.LoanRenewedTopicArn
+    }
   ]
 ])
 
