@@ -10,6 +10,7 @@ const sandbox = sinon.sandbox.create()
 process.env.LoanCreatedTopicArn = 'loan created topic'
 process.env.LoanDueDateTopicArn = 'due date topic'
 process.env.LoanRenewedTopicArn = 'loan renewed topic'
+process.env.LoanReturnedTopicArn = 'loan returned topic'
 
 // Module under test
 const eventTopicData = require('../../src/webhook-handler/eventTopicData')
@@ -38,6 +39,12 @@ describe('event topic data tests', () => {
   it('should return the loan renewed ARN environment variable', () => {
     eventTopicData.get('LOAN_RENEWED').should.deep.equal({
       sns_arn: 'loan renewed topic'
+    })
+  })
+
+  it('should return the loan returned ARN environment variable', () => {
+    eventTopicData.get('LOAN_RETURNED').should.deep.equal({
+      sns_arn: 'loan returned topic'
     })
   })
 })
