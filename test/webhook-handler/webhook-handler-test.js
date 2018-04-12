@@ -134,21 +134,22 @@ describe('webhook handler tests', () => {
     })
 
     eventTopicData.forEach((data, topicName) => {
-      it('should call SNS publish with the event body & correct topic arn', (done) => {
+      let topicArn = `arn:${topicName.toLowerCase()}`
+      it(`should call SNS publish with the event body & correct topic arn ${topicArn}`, (done) => {
         const getStub = sandbox.stub(eventTopicData, 'get')
         getStub.returns({
-          sns_arn: 'arn:' + topicName.toLowerCase()
+          sns_arn: topicArn
         })
 
         const publishStub = sandbox.stub()
         publishStub.callsArgWith(1, null, true)
         AWS_MOCK.mock('SNS', 'publish', publishStub)
 
-        let filename = './events/' + topicName.toLowerCase() + '_event.json'
+        let filename = `./events/${topicName.toLowerCase()}_event.json`
         let event = require(filename)
         let expected = {
           Message: event.body,
-          TargetArn: 'arn:' + topicName.toLowerCase()
+          TargetArn: topicArn
         }
 
         return handler.handleWebhookEvent(event, null, (err, res) => {
