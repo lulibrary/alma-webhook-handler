@@ -16,6 +16,7 @@ provider:
       Resource:
         - ${self:custom.topicArns.loanCreated}
         - ${self:custom.topicArns.loanDueDate}
+        - ${self:custom.topicArns.loanRenewed}
 
 functions:
   challenge:
@@ -39,6 +40,7 @@ functions:
       ALMA_SECRET_KEY_NAME: /library-api-gateway/webhook-handler/shared-secret
       LoanCreatedTopicArn: ${self:custom.topicArns.loanCreated}
       LoanDueDateTopicArn: ${self:custom.topicArns.loanDueDate}
+      LoanRenewedTopicArn: ${self:custom.topicArns.loanRenewed}
     role: webhookHandlerRole
     tags:
       serverless: true
@@ -88,6 +90,10 @@ resources:
       Type: AWS::SNS::Topic
       Properties:
         DisplayName: AlmaLoanDueDate
+    loanRenewedTopic:
+      Type: AWS::SNS::Topic
+      Properties:
+        DisplayName: AlmaLoanRenewed
   Outputs:
     LoanCreatedTopicArn:
       Description: Arn for Loan Created Topic
@@ -99,6 +105,11 @@ resources:
       Value: ${self:custom.topicArns.loanDueDate}
       Export:
         Name: ${self:service}:${opt:stage}:LoanDueDateTopicArn
+    LoanRenewedTopicArn:
+      Description: Arn for Loan Renewed Topic
+      Value: ${self:custom.topicArns.loanRenewed}
+      Export:
+        Name: ${self:service}:${opt:stage}:LoanRenewedTopicArn
 
 custom:
   KeyArns:
@@ -124,6 +135,13 @@ custom:
           - Ref: "AWS::Region"
           - Ref: "AWS::AccountId"
           - "Fn::GetAtt": [loanDueDateTopic, TopicName]
+    loanRenewed:
+      "Fn::Join": 
+        - ":"
+        - - "arn:aws:sns"
+          - Ref: "AWS::Region"
+          - Ref: "AWS::AccountId"
+          - "Fn::GetAtt": [loanRenewedTopic, TopicName]
 
 plugins:
   - serverless-pseudo-parameters
