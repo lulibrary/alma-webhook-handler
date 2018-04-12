@@ -39,7 +39,7 @@
     "sinon-chai": "^3.0.0"
   },
   "dependencies": {
-    "@lulibrary/lag-utils": "git+ssh://git@github.com/lulibrary/LAG-Utils.git",
+    "@lulibrary/lag-utils": "git+ssh://git@github.com/lulibrary/LAG-Utils.git#v0.1.0",
     "aws-sdk": "^2.223.1",
     "node-http-error": "^2.0.0",
     "serverless-pseudo-parameters": "^1.4.2"
