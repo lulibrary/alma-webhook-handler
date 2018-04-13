@@ -21,6 +21,7 @@ provider:
         - ${self:custom.topicArns.requestCreated}
         - ${self:custom.topicArns.requestClosed}
         - ${self:custom.topicArns.requestCanceled}
+        - ${self:custom.topicArns.requestPlacedOnShelf}
 
 functions:
   challenge:
@@ -49,6 +50,7 @@ functions:
       RequestCreatedTopicArn:  ${self:custom.topicArns.requestCreated}
       RequestClosedTopicArn: ${self:custom.topicArns.requestClosed}
       RequestCanceledTopicArn: ${self:custom.topicArns.requestCanceled}
+      RequestPlacedOnShelfTopicArn: ${self:custom.topicArns.requestPlacedOnShelf}
     role: webhookHandlerRole
     tags:
       serverless: true
@@ -118,6 +120,10 @@ resources:
       Type: AWS::SNS::Topic
       Properties:
         DisplayName: AlmaRequestCanceled
+    requestPlacedOnShelfTopic:
+      Type: AWS::SNS::Topic
+      Properties:
+        DisplayName: AlmaRequestPlacedOnShelf
   Outputs:
     LoanCreatedTopicArn:
       Description: Arn for Loan Created Topic
@@ -154,6 +160,11 @@ resources:
       Value: ${self:custom.topicArns.requestCanceled}
       Export:
         Name: ${self:service}:${opt:stage}:RequestCanceledTopicArn
+    RequestPlacedOnShelfTopicArn:
+      Description: Arn for Request Placed On Shelf Topic
+      Value: ${self:custom.topicArns.requestPlacedOnShelf}
+      Export:
+        Name: ${self:service}:${opt:stage}:RequestPlacedOnShelfTopicArn
 
 custom:
   KeyArns:
@@ -214,6 +225,13 @@ custom:
           - Ref: "AWS::Region"
           - Ref: "AWS::AccountId"
           - "Fn::GetAtt": [requestCanceledTopic, TopicName]
+    requestPlacedOnShelf:
+      "Fn::Join": 
+        - ":"
+        - - "arn:aws:sns"
+          - Ref: "AWS::Region"
+          - Ref: "AWS::AccountId"
+          - "Fn::GetAtt": [requestPlacedOnShelfTopic, TopicName]
 
 plugins:
   - serverless-pseudo-parameters
