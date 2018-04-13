@@ -66,10 +66,10 @@ describe('webhook handler tests', () => {
       })
     })
 
-    it('should callback with a 500 response if the event type is not supported', (done) => {
+    it('should callback with a 422 response if the event type is not supported', (done) => {
       handler.handleWebhookEvent(invalidEventType, null, (err, res) => {
         should.not.exist(err)
-        res.statusCode.should.equal(500)
+        res.statusCode.should.equal(422)
         done()
       })
     })

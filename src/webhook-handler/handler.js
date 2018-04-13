@@ -36,10 +36,19 @@ module.exports.handleWebhookEvent = (event, context, callback) => {
 
 const handleSnsPublish = (event) => {
   const body = extractMessageBody(event)
-  const eventTopicArn = eventTopicData.get(body.event.value).sns_arn
+  // const eventTopicArn = eventTopicData.get(body.event.value).sns_arn
+  const eventTopicArn = lookupTopicArn(body.event.value)
   const eventTopic = new Topic(eventTopicArn, process.env.AWS_DEFAULT_REGION)
 
   return eventTopic.publish(event.body)
+}
+
+const lookupTopicArn = (eventType) => {
+  try {
+    return eventTopicData.get(eventType).sns_arn
+  } catch (e) {
+    throw new HTTPError(422, `Event type ${eventType} is not supported`)
+  }
 }
 
 const extractMessageBody = (event) => {
