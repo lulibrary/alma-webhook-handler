@@ -20,6 +20,7 @@ provider:
         - ${self:custom.topicArns.loanReturned}
         - ${self:custom.topicArns.requestCreated}
         - ${self:custom.topicArns.requestClosed}
+        - ${self:custom.topicArns.requestCanceled}
 
 functions:
   challenge:
@@ -47,6 +48,7 @@ functions:
       LoanReturnedTopicArn: ${self:custom.topicArns.loanReturned}
       RequestCreatedTopicArn:  ${self:custom.topicArns.requestCreated}
       RequestClosedTopicArn: ${self:custom.topicArns.requestClosed}
+      RequestCanceledTopicArn: ${self:custom.topicArns.requestCanceled}
     role: webhookHandlerRole
     tags:
       serverless: true
@@ -112,6 +114,10 @@ resources:
       Type: AWS::SNS::Topic
       Properties:
         DisplayName: AlmaRequestClosed
+    requestCanceledTopic:
+      Type: AWS::SNS::Topic
+      Properties:
+        DisplayName: AlmaRequestCanceled
   Outputs:
     LoanCreatedTopicArn:
       Description: Arn for Loan Created Topic
@@ -143,6 +149,11 @@ resources:
       Value: ${self:custom.topicArns.requestClosed}
       Export:
         Name: ${self:service}:${opt:stage}:RequestClosedTopicArn
+    RequestCanceledTopicArn:
+      Description: Arn for Request Canceled Topic
+      Value: ${self:custom.topicArns.requestCanceled}
+      Export:
+        Name: ${self:service}:${opt:stage}:RequestCanceledTopicArn
 
 custom:
   KeyArns:
@@ -196,6 +207,13 @@ custom:
           - Ref: "AWS::Region"
           - Ref: "AWS::AccountId"
           - "Fn::GetAtt": [requestClosedTopic, TopicName]
+    requestCanceled:
+      "Fn::Join": 
+        - ":"
+        - - "arn:aws:sns"
+          - Ref: "AWS::Region"
+          - Ref: "AWS::AccountId"
+          - "Fn::GetAtt": [requestCanceledTopic, TopicName]
 
 plugins:
   - serverless-pseudo-parameters
