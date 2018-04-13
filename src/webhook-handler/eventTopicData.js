@@ -18,6 +18,11 @@ const eventTopicData = new Map([
     {
       sns_arn: process.env.LoanReturnedTopicArn
     }
+  ],
+  ['REQUEST_CREATED',
+    {
+      sns_arn: process.env.RequestCreatedTopicArn
+    }
   ]
 ])
 
