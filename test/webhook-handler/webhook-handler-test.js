@@ -133,6 +133,16 @@ describe('webhook handler tests', () => {
       AWS_MOCK.restore('SNS')
     })
 
+    it('should return a 500 error if Topic publish is rejected', () => {
+      let publishStub = sandbox.stub(Topic.prototype, 'publish')
+      publishStub.rejects(new Error('publish failed'))
+
+      handler.handleWebhookEvent(loanCreatedEvent, null, (err, res) => {
+        should.not.exist(err)
+        res.statusCode.should.equal(500)
+      })
+    })
+
     eventTopicData.forEach((data, topicName) => {
       let topicArn = `arn:${topicName.toLowerCase()}`
       it(`should call SNS publish with the event body & correct topic arn ${topicArn}`, (done) => {

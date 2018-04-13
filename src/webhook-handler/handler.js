@@ -36,7 +36,6 @@ module.exports.handleWebhookEvent = (event, context, callback) => {
 
 const handleSnsPublish = (event) => {
   const body = extractMessageBody(event)
-  // const eventTopicArn = eventTopicData.get(body.event.value).sns_arn
   const eventTopicArn = lookupTopicArn(body.event.value)
   const eventTopic = new Topic(eventTopicArn, process.env.AWS_DEFAULT_REGION)
 
