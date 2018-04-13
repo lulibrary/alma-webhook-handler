@@ -12,6 +12,7 @@ process.env.LoanDueDateTopicArn = 'due date topic'
 process.env.LoanRenewedTopicArn = 'loan renewed topic'
 process.env.LoanReturnedTopicArn = 'loan returned topic'
 process.env.RequestCreatedTopicArn = 'request created topic'
+process.env.RequestClosedTopicArn = 'request closed topic'
 
 // Module under test
 const eventTopicData = require('../../src/webhook-handler/eventTopicData')
@@ -52,6 +53,12 @@ describe('event topic data tests', () => {
   it('should return the request created ARN environment variable', () => {
     eventTopicData.get('REQUEST_CREATED').should.deep.equal({
       sns_arn: 'request created topic'
+    })
+  })
+
+  it('should return the request closed ARN environment variable', () => {
+    eventTopicData.get('REQUEST_CLOSED').should.deep.equal({
+      sns_arn: 'request closed topic'
     })
   })
 })

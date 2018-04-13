@@ -23,6 +23,11 @@ const eventTopicData = new Map([
     {
       sns_arn: process.env.RequestCreatedTopicArn
     }
+  ],
+  ['REQUEST_CLOSED',
+    {
+      sns_arn: process.env.RequestClosedTopicArn
+    }
   ]
 ])
 
