@@ -28,6 +28,11 @@ const eventTopicData = new Map([
     {
       sns_arn: process.env.RequestClosedTopicArn
     }
+  ],
+  ['REQUEST_CANCELED',
+    {
+      sns_arn: process.env.RequestCanceledTopicArn
+    }
   ]
 ])
 
