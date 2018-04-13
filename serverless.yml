@@ -18,6 +18,7 @@ provider:
         - ${self:custom.topicArns.loanDueDate}
         - ${self:custom.topicArns.loanRenewed}
         - ${self:custom.topicArns.loanReturned}
+        - ${self:custom.topicArns.requestCreated}
 
 functions:
   challenge:
@@ -43,6 +44,7 @@ functions:
       LoanDueDateTopicArn: ${self:custom.topicArns.loanDueDate}
       LoanRenewedTopicArn: ${self:custom.topicArns.loanRenewed}
       LoanReturnedTopicArn: ${self:custom.topicArns.loanReturned}
+      RequestCreatedTopicArn:  ${self:custom.topicArns.requestCreated}
     role: webhookHandlerRole
     tags:
       serverless: true
@@ -100,6 +102,10 @@ resources:
       Type: AWS::SNS::Topic
       Properties:
         DisplayName: AlmaLoanReturned
+    requestCreatedTopic:
+      Type: AWS::SNS::Topic
+      Properties:
+        DisplayName: AlmaRequestCreated
   Outputs:
     LoanCreatedTopicArn:
       Description: Arn for Loan Created Topic
@@ -121,6 +127,11 @@ resources:
       Value: ${self:custom.topicArns.loanReturned}
       Export:
         Name: ${self:service}:${opt:stage}:LoanReturnedTopicArn
+    RequestCreatedTopicArn:
+      Description: Arn for Request Created Topic
+      Value: ${self:custom.topicArns.requestCreated}
+      Export:
+        Name: ${self:service}:${opt:stage}:RequestCreatedTopicArn
 
 custom:
   KeyArns:
@@ -160,6 +171,13 @@ custom:
           - Ref: "AWS::Region"
           - Ref: "AWS::AccountId"
           - "Fn::GetAtt": [loanReturnedTopic, TopicName]
+    requestCreated:
+      "Fn::Join": 
+        - ":"
+        - - "arn:aws:sns"
+          - Ref: "AWS::Region"
+          - Ref: "AWS::AccountId"
+          - "Fn::GetAtt": [requestCreatedTopic, TopicName]
 
 plugins:
   - serverless-pseudo-parameters
