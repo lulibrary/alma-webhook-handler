@@ -66,10 +66,10 @@ describe('webhook handler tests', () => {
       })
     })
 
-    it('should callback with a 500 response if the event type is not supported', (done) => {
+    it('should callback with a 422 response if the event type is not supported', (done) => {
       handler.handleWebhookEvent(invalidEventType, null, (err, res) => {
         should.not.exist(err)
-        res.statusCode.should.equal(500)
+        res.statusCode.should.equal(422)
         done()
       })
     })
@@ -131,6 +131,16 @@ describe('webhook handler tests', () => {
 
     afterEach(() => {
       AWS_MOCK.restore('SNS')
+    })
+
+    it('should return a 500 error if Topic publish is rejected', () => {
+      let publishStub = sandbox.stub(Topic.prototype, 'publish')
+      publishStub.rejects(new Error('publish failed'))
+
+      handler.handleWebhookEvent(loanCreatedEvent, null, (err, res) => {
+        should.not.exist(err)
+        res.statusCode.should.equal(500)
+      })
     })
 
     eventTopicData.forEach((data, topicName) => {
