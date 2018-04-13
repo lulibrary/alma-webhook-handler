@@ -33,6 +33,11 @@ const eventTopicData = new Map([
     {
       sns_arn: process.env.RequestCanceledTopicArn
     }
+  ],
+  ['REQUEST_PLACED_ON_SHELF',
+    {
+      sns_arn: process.env.RequestPlacedOnShelfTopicArn
+    }
   ]
 ])
 
