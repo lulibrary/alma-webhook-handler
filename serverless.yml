@@ -22,6 +22,13 @@ provider:
         - ${self:custom.topicArns.requestClosed}
         - ${self:custom.topicArns.requestCanceled}
         - ${self:custom.topicArns.requestPlacedOnShelf}
+    - Effect: Allow
+      Action: 
+        - ssm:GetParameter
+        - ssm:GetParameters
+        - ssm:GetParametersByPath
+      Resource:
+        - ${env:ALMA_SHARED_SECRET_ARN}
 
 functions:
   challenge:
@@ -42,7 +49,7 @@ functions:
           path: ''
           method: post
     environment:
-      ALMA_SECRET_KEY_NAME: /library-api-gateway/webhook-handler/shared-secret
+      ALMA_SECRET_KEY_NAME: ${env:ALMA_SHARED_SECRET_NAME}
       LoanCreatedTopicArn: ${self:custom.topicArns.loanCreated}
       LoanDueDateTopicArn: ${self:custom.topicArns.loanDueDate}
       LoanRenewedTopicArn: ${self:custom.topicArns.loanRenewed}
@@ -51,7 +58,6 @@ functions:
       RequestClosedTopicArn: ${self:custom.topicArns.requestClosed}
       RequestCanceledTopicArn: ${self:custom.topicArns.requestCanceled}
       RequestPlacedOnShelfTopicArn: ${self:custom.topicArns.requestPlacedOnShelf}
-    role: webhookHandlerRole
     tags:
       serverless: true
       environment: ${self:custom.environmentNames.${opt:stage}}
@@ -60,38 +66,6 @@ functions:
 
 resources:
   Resources:
-    webhookHandlerRole:
-      Type: AWS::IAM::Role
-      Properties:
-        AssumeRolePolicyDocument:
-          Version: '2012-10-17'
-          Statement:
-            - Effect: Allow
-              Principal:
-                Service:
-                  - lambda.amazonaws.com
-              Action: sts:AssumeRole
-        Policies:
-          - PolicyName: ${self:service}-${opt:stage}-AllowGetSSMParameters-Policy
-            PolicyDocument:
-              Version: '2012-10-17'
-              Statement:
-                Effect: Allow
-                Action: 
-                  - ssm:GetParameter
-                  - ssm:GetParameters
-                  - ssm:GetParametersByPath
-                Resource: arn:aws:ssm:eu-west-2:#{AWS::AccountId}:parameter/library-api-gateway/webhook-handler/*
-          - PolicyName: ${self:service}-${opt:stage}-AllowKMSKeyAccess-Policy
-            PolicyDocument:
-              Version: '2012-10-17'
-              Statement:
-                Effect: Allow
-                Action:
-                  - kms:GenerateDataKey
-                  - kms:Encrypt
-                  - kms:Decrypt
-                Resource: ${self:custom.KeyArns.${opt:stage}}
     loanCreatedTopic:
       Type: AWS::SNS::Topic
       Properties:
