@@ -31,7 +31,7 @@ const getSecretFromAWS = () => {
 
   return new Promise((resolve, reject) => {
     ssm.getParameter(params, (err, data) => {
-      err ? reject(err) : resolve(data.Value)
+      err ? reject(err) : resolve(data.Parameter.Value)
     })
   })
 }

@@ -20,6 +20,7 @@ module.exports.handleWebhookEvent = (event, context, callback) => {
       }
     })
     .catch((e) => {
+      console.log(e)
       if (e instanceof HTTPError) {
         response = errorResponse(e.status, e.message)
       } else {
