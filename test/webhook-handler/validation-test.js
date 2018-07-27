@@ -28,14 +28,14 @@ describe('signature validation tests', () => {
   })
 
   it('should throw an error if the signature is invalid', () => {
-    AWS_MOCK.mock('SSM', 'getParameter', { Value: 'secretkey' })
+    AWS_MOCK.mock('SSM', 'getParameter', { Parameter: { Value: 'secretkey' } })
 
     validateRequestSignature('a message', 'not a valid signature').should.eventually.be.rejectedWith('An invalid message signature was sent')
       .and.should.eventually.be.an.instanceof(HTTPError)
   })
 
   it('should not throw an error if the signature is valid', () => {
-    AWS_MOCK.mock('SSM', 'getParameter', { Value: 'secretkey' })
+    AWS_MOCK.mock('SSM', 'getParameter', { Parameter: { Value: 'secretkey' } })
 
     return validateRequestSignature("{'api':'alma'}", 'FPkZ/un59vBhgs4dn6yqhqMosD4oK4/fp8swRtkVxAE=')
       .should.eventually.be.fulfilled

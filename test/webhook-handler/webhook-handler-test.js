@@ -30,7 +30,7 @@ describe('webhook handler tests', () => {
 
   describe('validation tests', () => {
     before(() => {
-      AWS_MOCK.mock('SSM', 'getParameter', { Value: 'secretkey' })
+      AWS_MOCK.mock('SSM', 'getParameter', { Parameter: { Value: 'secretkey' } })
       process.env.ALMA_SECRET_KEY_NAME = 'testkey'
     })
 
@@ -77,7 +77,7 @@ describe('webhook handler tests', () => {
 
   describe('Topic publish tests', () => {
     before(() => {
-      AWS_MOCK.mock('SSM', 'getParameter', { Value: 'secretkey' })
+      AWS_MOCK.mock('SSM', 'getParameter', { Parameter: { Value: 'secretkey' } })
       process.env.ALMA_SECRET_KEY_NAME = 'testkey'
       process.env.AWS_DEFAULT_REGION = 'eu-west-2'
     })
@@ -118,7 +118,7 @@ describe('webhook handler tests', () => {
 
   describe('End to end tests', () => {
     before(() => {
-      AWS_MOCK.mock('SSM', 'getParameter', { Value: 'secretkey' })
+      AWS_MOCK.mock('SSM', 'getParameter', { Parameter: { Value: 'secretkey' } })
       process.env.ALMA_SECRET_KEY_NAME = 'testkey'
       process.env.AWS_DEFAULT_REGION = 'eu-west-2'
     })
