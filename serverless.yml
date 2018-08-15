@@ -28,7 +28,7 @@ provider:
         - ssm:GetParameters
         - ssm:GetParametersByPath
       Resource:
-        - ${env:ALMA_SHARED_SECRET_ARN}
+        - arn:aws:ssm:#{AWS::Region}:#{AWS:AccountID}:parameter/${env:ALMA_SHARED_SECRET_NAME}
 
 functions:
   challenge:
